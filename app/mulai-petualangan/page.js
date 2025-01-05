@@ -29,8 +29,8 @@ const MulaiPetualangan = () => {
                             <button
                                 key={region}
                                 onClick={() => handleSelectRegion(region)}
-                                className={`bg-gradient-to-r ${region === 'jawa' ? 'from-yellow-500 to-yellow-400' : region === 'sumatra' ? 'from-green-500 to-green-300' : region === 'kalimantan' ? 'from-teal-500 to-teal-300' : region === 'sulawesi' ? 'from-pink-500 to-pink-300' : region === 'papua' ? 'from-indigo-500 to-indigo-300' : 'from-purple-500 to-purple-300'} text-white p-6 rounded-lg shadow-lg hover:bg-opacity-80 hover:scale-110 hover:rotate-6 transition-all duration-300 ease-in-out text-center flex items-center justify-center space-x-2 transform hover:scale-110 hover:rotate-12`}>
-                                <img
+                                className={`bg-gradient-to-r ${region === 'jawa' ? 'from-yellow-500 to-yellow-400' : region === 'sumatra' ? 'from-green-500 to-green-300' : region === 'kalimantan' ? 'from-teal-500 to-teal-300' : region === 'sulawesi' ? 'from-pink-500 to-pink-300' : region === 'papua' ? 'from-indigo-500 to-indigo-300' : 'from-purple-500 to-purple-300'} text-white p-6 rounded-lg shadow-lg hover:bg-opacity-80 hover:scale-110 hover:rotate-6 transition-all duration-300 ease-in-out text-center flex items-center justify-center space-x-2 transform`}>
+                                <Image
                                     src={`/icons/${region}.png`}
                                     alt={region}
                                     width={50}
