@@ -24,6 +24,7 @@ export default function Home() {
               alt="Logo Nusantara Maps"
               width={350}
               height={350}
+              objectPosition="center"
               className="mb-6 drop-shadow-xl animate-bounce justify-center"
             />
 

@@ -133,7 +133,7 @@ const Map = () => {
         <div className="relative">
             <div
                 ref={mapContainer}
-                className="h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] w-full border-4 border-yellow-400 rounded-xl mx-auto shadow-2xl transition-all duration-300 hover:bg-gradient-to-r from-pink-400 to-yellow-500 hover:shadow-lg flex items-center justify-center"
+                className="h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] w-full border-4 border-[#FF4081] rounded-full mx-auto shadow-2xl transition-all duration-300 hover:scale-105 hover:bg-gradient-to-r from-[#FF4081] to-[#FF5722] hover:shadow-xl flex items-center justify-center"
             />
             {selectedRegion && (
                 <div
