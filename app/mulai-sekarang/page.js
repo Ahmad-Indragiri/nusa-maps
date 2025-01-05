@@ -74,6 +74,7 @@ const Map = () => {
                 maxBoundsViscosity: 1.0,
                 center: [-0.7893, 117.1485],
                 zoom: 5,
+                zoomControl: false,
             });
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
