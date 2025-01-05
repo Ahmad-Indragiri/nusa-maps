@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import Navbar from '../NavBar/navbar';
+import Navbar from '../NavBar/navbar'; // Menambahkan navbar sesuai path yang diinginkan
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -17,8 +17,7 @@ const Map = () => {
     const [feedback, setFeedback] = useState('');
     const contentRef = useRef(null);
 
-
-    // Data structure with categories and questions
+    // Data struktur dengan kategori dan pertanyaan
     const data = {
         jawa: {
             languages: [
@@ -185,6 +184,7 @@ const Map = () => {
             ],
         }
     };
+    
 
     const regions = [
         { name: 'Pulau Jawa', coords: [-7.5, 110], key: 'jawa', icon: '/icons/jawa.png' },
@@ -196,15 +196,15 @@ const Map = () => {
     ];
 
     const handleMarkerClick = (region) => {
-        // Reset state when changing region
+        // Reset state saat memilih region
         setSelectedRegion(region);
-        setSelectedCategory(null); // Reset category on region change
-        setScore(0); // Reset score when changing region
-        setQuestionIndex(0); // Reset question index
+        setSelectedCategory(null); // Reset kategori
+        setScore(0); // Reset score
+        setQuestionIndex(0); // Reset index pertanyaan
         setFeedback(''); // Reset feedback
-        setQuestion('Pilih kategori untuk mulai bermain!'); // Initial question
+        setQuestion('Pilih kategori untuk mulai bermain!'); // Pertanyaan awal
 
-        // Scroll content view into view if available
+        // Scroll konten view ke atas jika tersedia
         if (contentRef.current) {
             contentRef.current.scrollIntoView({
                 behavior: 'smooth',
@@ -217,63 +217,51 @@ const Map = () => {
         setSelectedCategory(category);
         const categoryData = data[selectedRegion.key][category];
 
-        // Check if category data exists and has questions
+        // Periksa jika kategori data ada dan memiliki pertanyaan
         if (categoryData && categoryData.length > 0) {
-            setQuestionIndex(0); // Reset question index to 0 when selecting a new category
-            setQuestion(categoryData[0].question); // Show first question of selected category
+            setQuestionIndex(0); // Reset index pertanyaan saat memilih kategori baru
+            setQuestion(categoryData[0].question); // Tampilkan pertanyaan pertama dari kategori yang dipilih
             setFeedback(''); // Reset feedback
         } else {
-            setFeedback('Kategori tidak memiliki pertanyaan!'); // Handle case if no questions are available
+            setFeedback('Kategori tidak memiliki pertanyaan!'); // Jika kategori tidak memiliki pertanyaan
         }
     };
-
 
     const handleAnswer = (answer) => {
         if (selectedRegion && selectedCategory) {
-            const categoryData = data[selectedRegion.key][selectedCategory]; // Get selected category data
-            const questionData = categoryData[questionIndex]; // Get current question
+            const categoryData = data[selectedRegion.key][selectedCategory]; // Ambil data kategori yang dipilih
+            const questionData = categoryData[questionIndex]; // Ambil pertanyaan saat ini
 
-            // Ensure question data exists
+            // Pastikan data pertanyaan ada
             if (questionData) {
                 const correctAnswer = questionData.answer;
 
-                // Compare the selected answer with the correct answer
+                // Bandingkan jawaban yang dipilih dengan jawaban yang benar
                 if (answer.toLowerCase().trim() === correctAnswer.toLowerCase().trim()) {
-                    setScore(prevScore => prevScore + 1); // Increase score if answer is correct
-                    setFeedback('Jawaban benar!'); // Correct answer feedback
-                    setQuestionIndex(prevIndex => prevIndex + 1); // Move to next question
+                    setScore(prevScore => prevScore + 1); // Tambahkan skor jika jawaban benar
+                    setFeedback('Jawaban benar!'); // Feedback jawaban benar
+                    setQuestionIndex(prevIndex => prevIndex + 1); // Pindah ke pertanyaan berikutnya
 
-                    // Check if there are more questions in the category
+                    // Periksa apakah masih ada pertanyaan lain dalam kategori ini
                     if (questionIndex + 1 < categoryData.length) {
-                        setQuestion(categoryData[questionIndex + 1].question); // Show next question
+                        setQuestion(categoryData[questionIndex + 1].question); // Tampilkan pertanyaan berikutnya
                     } else {
-                        // If all questions have been answered, show completion message
+                        // Jika sudah selesai menjawab semua pertanyaan, tampilkan pesan selesai
                         setQuestion('Selamat! Kamu telah menjawab semua pertanyaan dalam kategori ini.');
                         setTimeout(() => {
-                            setSelectedCategory(null); // Reset category after completion
+                            setSelectedCategory(null); // Reset kategori setelah selesai
                             setQuestion('Pilih kategori berikutnya!');
                             setFeedback('');
-                        }, 2000); // Wait 2 seconds before resetting
+                        }, 2000); // Tunggu 2 detik sebelum reset
                     }
                 } else {
-                    setFeedback('Jawaban salah, coba lagi!'); // Incorrect answer feedback
+                    setFeedback('Jawaban salah, coba lagi!'); // Feedback jawaban salah
                 }
             } else {
-                setFeedback('Pertanyaan tidak ditemukan, coba lagi!'); // Handle case where question data is missing
-            }
-            const nextIndex = questionIndex + 1;
-            if (nextIndex < data[selectedRegion.key][selectedCategory].length) {
-                setQuestionIndex(nextIndex);
-                setQuestion(data[selectedRegion.key][selectedCategory][nextIndex].question);
-            } else {
-                setFeedback('Quiz selesai!');
+                setFeedback('Pertanyaan tidak ditemukan, coba lagi!'); // Jika data pertanyaan tidak ditemukan
             }
         }
     };
-
-
-
-
 
     useEffect(() => {
         if (mapContainer.current) {
@@ -286,114 +274,63 @@ const Map = () => {
                 center: [-0.7893, 117.1485],
                 zoom: 5,
             });
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenstreetMap contributors',
-            }).addTo(map);
-
-            regions.forEach(({ name, coords, key, icon }) => {
-                const customMarker = L.icon({
-                    iconUrl: icon,
-                    iconSize: [60, 60],
-                    iconAnchor: [30, 35],
-                    popupAnchor: [0, -15],
-                });
-
-                const marker = L.marker(coords, { icon: customMarker }).addTo(map);
-                marker.on('click', () => handleMarkerClick({ name, key }));
+    
+            // Tambahkan Tile Layer ke peta
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    
+            // Tambahkan marker untuk setiap region
+            regions.forEach(region => {
+                const marker = L.marker(region.coords).addTo(map);
+                marker.on('click', () => handleMarkerClick(region));
+                marker.bindPopup(`<b>${region.name}</b>`);
             });
-
-            return () => {
-                map.remove();
-            };
         }
-    }, []);
+    }, [mapContainer, selectedRegion]);  // Tambahkan selectedRegion sebagai dependensi
+    
 
     return (
-        <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-[#F6C6EA] via-[#D4C1FF] to-[#FFEDD5]">
+        <div>
             <Navbar />
-            <div
-                ref={mapContainer}
-                className="h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] w-full border-4 border-[#FF4081] rounded-full mx-auto shadow-2xl transition-all duration-300 hover:scale-105 hover:bg-gradient-to-r from-[#FF4081] to-[#FF5722] hover:shadow-xl flex items-center justify-center"
-            />
-            {selectedRegion && (
-                <div
-                    ref={contentRef}
-                    className="mt-8 bg-gradient-to-r from-[#FF6F61] to-[#FF9800] p-8 rounded-3xl shadow-2xl w-full max-w-2xl mx-auto"
-                >
-                    <h3 className="text-5xl font-bold text-[#FFFFFF] mb-6 text-center animate__animated animate__fadeInUp">
-                        Ayo Jelajahi {selectedRegion.name}! Pilih Kategori untuk Bermain
-                    </h3>
-    
-                    {selectedCategory === null && (
-                        <div className="space-y-4">
-                            {['languages', 'foods', 'dances', 'folkTales', 'songs', 'musicInstruments'].map((category, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => handleCategorySelect(category)}
-                                    className="w-full py-3 px-6 bg-gradient-to-r from-[#03A9F4] to-[#00BCD4] text-white text-xl font-semibold rounded-lg shadow-lg hover:scale-110 transition-all duration-300 ease-in-out transform hover:rotate-3"
-                                >
-                                    {category.charAt(0).toUpperCase() + category.slice(1)}
-                                </button>
-                            ))}
-                        </div>
-                    )}
-    
-                    {selectedCategory !== null && data[selectedRegion.key] && data[selectedRegion.key][selectedCategory] && data[selectedRegion.key][selectedCategory].length > 0 && (
-                        <div className="space-y-6">
-                            <p className="text-white text-2xl font-semibold mb-4">{question}</p>
-                            {data[selectedRegion.key][selectedCategory].map((item, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => handleAnswer(item.answer)}
-                                    className="w-full py-4 px-6 bg-gradient-to-r from-[#8BC34A] to-[#4CAF50] text-white text-lg font-semibold rounded-full shadow-lg hover:bg-[#388E3C] hover:scale-105 transition-all duration-300 ease-in-out"
-                                >
-                                    {item.answer}
-                                </button>
-                            ))}
-                        </div>
-                    )}
-    
-                    {/* If no questions are available for the selected category */}
-                    {selectedCategory !== null && (!data[selectedRegion.key] || !data[selectedRegion.key][selectedCategory] || data[selectedRegion.key][selectedCategory].length === 0) && (
-                        <p className="text-white font-semibold text-2xl text-center">Oops, tidak ada pertanyaan di kategori ini!</p>
-                    )}
-    
-                    {feedback && (
-                        <div className="mt-4 text-white text-center font-italic text-lg animate__animated animate__bounceInUp">
-                            {feedback}
-                        </div>
-                    )}
-    
-                    {/* Score and Feedback Section */}
-                    <div className="mt-6 text-center">
-                        <h4 className="text-4xl font-extrabold text-[#FFEB3B]">
-                            {question}
-                        </h4>
-                        {feedback && (
-                            <p
-                                className={`text-3xl font-semibold text-center ${feedback.includes('benar') ? 'text-[#388E3C]' : 'text-[#F44336]'} animate__animated animate__fadeIn`}
-                            >
-                                {feedback} {feedback.includes('benar') ? '🎉' : '😢'}
-                            </p>
-                        )}
-                        <p className="text-2xl font-bold text-[#FFEB3B]">
-                            Poin Kamu: {score} ⭐
-                        </p>
-                    </div>
-    
-                    <button
-                        onClick={() => setSelectedRegion(null)}
-                        className="mt-8 py-4 px-6 bg-gradient-to-r from-[#FF5722] to-[#D32F2F] text-white text-2xl font-bold rounded-3xl shadow-md hover:bg-red-700 hover:scale-105 transition-transform duration-300 ease-in-out"
-                    >
-                        Kembali ke Peta
-                    </button>
+            <div ref={mapContainer} style={{ height: '500px' }}></div>
+
+            <div ref={contentRef} className="content">
+                <h2>{selectedRegion ? `Region: ${selectedRegion.name}` : 'Pilih Region'}</h2>
+                <div>
+                    {regions.map(region => (
+                        <button key={region.key} onClick={() => handleMarkerClick(region)}>
+                            {region.name}
+                        </button>
+                    ))}
                 </div>
-            )}
-        </main>
+
+                {selectedRegion && (
+                    <div>
+                        <h3>Pilih Kategori</h3>
+                        <button onClick={() => handleCategorySelect('languages')}>Bahasa</button>
+                        <button onClick={() => handleCategorySelect('foods')}>Makanan</button>
+                        <button onClick={() => handleCategorySelect('dances')}>Tari</button>
+                        <button onClick={() => handleCategorySelect('folkTales')}>Cerita Rakyat</button>
+                    </div>
+                )}
+
+                {selectedCategory && question && (
+                    <div>
+                        <p>{question}</p>
+                        <input 
+                            type="text" 
+                            onChange={(e) => handleAnswer(e.target.value)} 
+                            placeholder="Tulis jawaban"
+                        />
+                    </div>
+                )}
+
+                <div>
+                    <h3>Skor: {score}</h3>
+                    <p>{feedback}</p>
+                </div>
+            </div>
+        </div>
     );
-    
-      
 };
 
 export default Map;
