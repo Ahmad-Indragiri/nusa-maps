@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import L, { icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import Navbar from '../NavBar/navbar';
 import Image from 'next/image';
@@ -165,20 +164,20 @@ const Map = () => {
                             >
                                 <Image
                                     src="/icons/food-icon.png"
-                                    alt="Kuliner"
+                                    alt="Makanan"
                                     width={24}
                                     height={24}
                                     className="w-6 h-6"
                                 />
-                                <span className="font-semibold text-lg">Kuliner Daerah</span>
+                                <span className="font-semibold text-lg">Makanan Khas</span>
                             </button>
 
                             <button
                                 onClick={() => handleOptionClick('songs')}
-                                className="bg-pink-500 text-white p-6 rounded-lg shadow-lg hover:bg-pink-300 hover:scale-110 transition-all duration-300 ease-in-out text-center flex items-center justify-center space-x-2"
+                                className="bg-red-500 text-white p-6 rounded-lg shadow-lg hover:bg-red-300 hover:scale-110 transition-all duration-300 ease-in-out text-center flex items-center justify-center space-x-2"
                             >
                                 <Image
-                                    src="/icons/music-note-icon.png"
+                                    src="/icons/music-icon.png"
                                     alt="Lagu"
                                     width={24}
                                     height={24}
@@ -189,62 +188,59 @@ const Map = () => {
 
                             <button
                                 onClick={() => handleOptionClick('dances')}
-                                className="bg-teal-500 text-white p-6 rounded-lg shadow-lg hover:bg-teal-300 hover:scale-110 transition-all duration-300 ease-in-out text-center flex items-center justify-center space-x-2"
+                                className="bg-blue-500 text-white p-6 rounded-lg shadow-lg hover:bg-blue-300 hover:scale-110 transition-all duration-300 ease-in-out text-center flex items-center justify-center space-x-2"
                             >
                                 <Image
                                     src="/icons/dance-icon.png"
-                                    alt="Tarian"
+                                    alt="Tari"
                                     width={24}
                                     height={24}
                                     className="w-6 h-6"
                                 />
-                                <span className="font-semibold text-lg">Tarian Daerah</span>
+                                <span className="font-semibold text-lg">Tari Tradisional</span>
                             </button>
 
                             <button
                                 onClick={() => handleOptionClick('folkTales')}
-                                className="bg-indigo-500 text-white p-6 rounded-lg shadow-lg hover:bg-indigo-300 hover:scale-110 transition-all duration-300 ease-in-out text-center flex items-center justify-center space-x-2"
+                                className="bg-purple-500 text-white p-6 rounded-lg shadow-lg hover:bg-purple-300 hover:scale-110 transition-all duration-300 ease-in-out text-center flex items-center justify-center space-x-2"
                             >
                                 <Image
-                                    src="/icons/book-icon.png"
-                                    alt="Cerita"
+                                    src="/icons/tale-icon.png"
+                                    alt="Dongeng"
                                     width={24}
                                     height={24}
                                     className="w-6 h-6"
                                 />
-                                <span className="font-semibold text-lg">Cerita Rakyat</span>
+                                <span className="font-semibold text-lg">Dongeng dan Cerita Rakyat</span>
                             </button>
 
                             <button
                                 onClick={() => handleOptionClick('musicalInstruments')}
-                                className="bg-purple-500 text-white p-6 rounded-lg shadow-lg hover:bg-purple-300 hover:scale-110 transition-all duration-300 ease-in-out text-center flex items-center justify-center space-x-2"
+                                className="bg-teal-500 text-white p-6 rounded-lg shadow-lg hover:bg-teal-300 hover:scale-110 transition-all duration-300 ease-in-out text-center flex items-center justify-center space-x-2"
                             >
                                 <Image
-                                    src="/icons/music-instrument-icon.png"
-                                    alt="Alat Musik"
+                                    src="/icons/instrument-icon.png"
+                                    alt="Instrumen Musik"
                                     width={24}
                                     height={24}
                                     className="w-6 h-6"
                                 />
-                                <span className="font-semibold text-lg">Alat Musik Daerah</span>
+                                <span className="font-semibold text-lg">Instrumen Musik Tradisional</span>
                             </button>
                         </div>
                     )}
 
                     {selectedContent && (
-                        <div className="bg-white p-6 rounded-lg shadow-xl">
-                            {Array.isArray(selectedContent) ? (
-                                <ul className="space-y-3">
-                                    {selectedContent.map((item, index) => (
-                                        <li key={index} className="text-gray-700 text-lg">{item}</li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p className="text-gray-700 text-lg">{selectedContent}</p>
-                            )}
+                        <div className="mt-4">
+                            <h4 className="text-2xl font-semibold text-white">Konten yang dipilih:</h4>
+                            <ul className="text-white space-y-2 mt-4">
+                                {selectedContent.map((item, index) => (
+                                    <li key={index} className="text-lg">{item}</li>
+                                ))}
+                            </ul>
                             <button
                                 onClick={handleBackClick}
-                                className="mt-4 bg-blue-500 text-white p-4 rounded-lg hover:bg-blue-400 hover:scale-105 transition-all duration-300 ease-in-out"
+                                className="mt-4 bg-gray-800 text-white py-2 px-6 rounded-lg"
                             >
                                 Kembali
                             </button>
@@ -254,7 +250,6 @@ const Map = () => {
             )}
         </div>
     );
-
 };
 
 const MulaiSekarang = () => {
