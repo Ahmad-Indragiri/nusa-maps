@@ -87,7 +87,7 @@ const Map = () => {
                 { name: 'Pulau Kalimantan', coords: [0, 114], key: 'kalimantan', icon: '/icons/kalimantan.png' },
                 { name: 'Pulau Sulawesi', coords: [-2, 121], key: 'sulawesi', icon: '/icons/sulawesi.png' },
                 { name: 'Pulau Papua', coords: [-4, 135], key: 'papua', icon: '/icons/papua.png' },
-                { name: 'Pulau Nusa Tenggara', coords: [-8.5, 118.5], key: 'nusaTenggara', icon: '/icons/bali.png' },
+                { name: 'Pulau Nusa Tenggara', coords: [-8.5, 118.5], key: 'nusaTenggara', icon: '/icons/nusaTenggara.png' },
             ];
 
             const handleMarkerClick = (region) => {
