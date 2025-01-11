@@ -307,7 +307,7 @@ const Map = () => {
                 map.remove();
             };
         }
-    }, []);
+    }, [regions]);
 
     return (
         <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-[#F6C6EA] via-[#D4C1FF] to-[#FFEDD5]">
