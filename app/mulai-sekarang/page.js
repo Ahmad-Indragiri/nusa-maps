@@ -7,6 +7,7 @@ import Navbar from '../NavBar/navbar';
 import Image from 'next/image';
 import Link from 'next/link';
 
+
 const Map = () => {
     const mapContainer = useRef(null);
     const [selectedRegion, setSelectedRegion] = useState(null);
@@ -65,7 +66,7 @@ const Map = () => {
     };
 
     useEffect(() => {
-        if (mapContainer.current) {
+        if (typeof window !== "undefined" && mapContainer.current) {
             const map = L.map(mapContainer.current, {
                 maxBounds: [
                     [-11, 94],
@@ -76,7 +77,7 @@ const Map = () => {
                 zoom: 5,
                 zoomControl: false,
             });
-
+    
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors',
             }).addTo(map);
